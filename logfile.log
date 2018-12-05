@@ -1,0 +1,164 @@
+Main execution started at: 2018-12-05 00:13:20.954416
+Boxes dataset:
+   subscription_id    box_id delivery_date started_week product    channel
+0        1000001.0  US243134    2014-11-10     2012-W36   type2  channel16
+1        1000001.0  US287248    2014-12-08     2012-W36   type2  channel16
+2        1000001.0  US369486    2015-01-19     2012-W36   type2  channel16
+3        1000001.0  US299749    2014-12-15     2012-W36   type2  channel16
+4        1000001.0  US254024    2014-11-17     2012-W36   type2  channel16
+Pauses dataset:
+   subscription_id pause_start   pause_end
+0        1000001.0  2015-02-09  2015-02-15
+1        1000001.0  2014-11-24  2014-11-30
+2        1000001.0  2015-02-02  2015-02-08
+3        1000001.0  2015-02-16  2015-02-22
+4        1000001.0  2015-01-12  2015-01-18
+Cancels dataset:
+   subscription_id    event_type  event_date
+0          1000001  cancellation  2015-02-25
+1          1000008  reactivation  2017-01-07
+2          1000008  cancellation  2016-12-10
+3          1000008  reactivation  2016-11-29
+4          1000008  reactivation  2017-11-03
+Errors dataset:
+   subscription_id reported_date         ...         compensation_type compensation_amount
+0          1000001    2014-12-05         ...                    credit                10.0
+1          1000010    2015-06-09         ...                    credit                25.0
+2          1000010    2015-04-02         ...                    credit                25.0
+3          1000010    2016-02-17         ...               full_refund                69.0
+4          1000012    2015-05-28         ...                    credit                34.5
+
+[5 rows x 5 columns]
+
+EDA - Boxes
+# Missing values:
+subscription_id    0
+box_id             0
+delivery_date      0
+started_week       5
+product            0
+channel            0
+dtype: int64
+#Entries: 4552066 , # Unique box ids: 4552066
+Entries with null fields:
+         subscription_id      box_id delivery_date started_week product    channel
+3149601        1654222.0  US19011587    2017-10-31          NaN   type5  channel16
+3149602        1654222.0  US15877368    2017-08-15          NaN   type1  channel13
+3149604        1654222.0  US16860920    2017-09-12          NaN   type5  channel16
+3149605        1654222.0  US19347197    2017-11-07          NaN   type5  channel16
+3149607        1654222.0  US18096887    2017-10-10          NaN   type5  channel16
+Entries with problematic subscription:
+         subscription_id      box_id delivery_date started_week product    channel
+3149600        1654222.0  US12571602    2017-05-09     2017-W09   type1  channel13
+3149601        1654222.0  US19011587    2017-10-31          NaN   type5  channel16
+3149602        1654222.0  US15877368    2017-08-15          NaN   type1  channel13
+3149603        1654222.0  US10612583    2017-03-14     2017-W09   type1  channel16
+3149604        1654222.0  US16860920    2017-09-12          NaN   type5  channel16
+3149605        1654222.0  US19347197    2017-11-07          NaN   type5  channel16
+3149606        1654222.0  US10176578    2017-02-28     2017-W09   type1   channel7
+3149607        1654222.0  US18096887    2017-10-10          NaN   type5  channel16
+3149608        1654222.0  US13805841    2017-06-13     2017-W09   type1  channel16
+3149609        1654222.0  US10265421    2017-03-07     2017-W09   type1  channel16
+The started_week is immutable for any subscription:  True
+Missing values in boxes have been imputed.
+#Entries: 4552066 , # Unique subscription ids: 1079116 , Avg #boxes per customer: 4.2
+Entries having start of started_week more recent than delivery_date - timedelta summary:
+count                       936
+mean     5 days 01:52:18.461538
+std      7 days 18:32:02.091565
+min             1 days 00:00:00
+25%             2 days 00:00:00
+50%             3 days 00:00:00
+75%             5 days 00:00:00
+max           108 days 00:00:00
+dtype: object
+124 entries having an anomalous timedelta higher than one week have been dropped.
+
+EDA - Pauses
+Anomalous pauses timedelta summary:
+count                   26
+mean     360 days 00:00:00
+std        0 days 00:00:00
+min      360 days 00:00:00
+25%      360 days 00:00:00
+50%      360 days 00:00:00
+75%      360 days 00:00:00
+max      360 days 00:00:00
+dtype: object
+Anomalous pause entries have been removed.
+
+EDA - Cancels
+Proportions of Cancellation and Reactivation Events:
+cancellation    0.87
+reactivation    0.13
+Name: event_type, dtype: float64
+
+EDA - Errors
+Entries having week=="0000-W00":
+        subscription_id reported_date      week compensation_type  compensation_amount
+289631          1639849    2017-02-20  0000-W00            credit                69.92
+The erroneous entry has been dropped.
+Entries having start of error week more recent than reported_date - timedelta summary:
+count                     93960
+mean     2 days 14:44:20.229885
+std      7 days 01:03:39.654589
+min             1 days 00:00:00
+25%             1 days 00:00:00
+50%             2 days 00:00:00
+75%             2 days 00:00:00
+max           727 days 00:00:00
+dtype: object
+3240 entries having an anomalous timedelta higher than one week have been dropped.
+"full refund" compensation types have been replaced with "full_refund"
+Compensation type statistics:
+                      count       mean         std   min     25%   50%     75%      max
+compensation_type                                                                      
+credit             271383.0  36.381964   41.051576  0.00  10.000  23.0   59.94  6900.00
+full_refund        119923.0  66.539662   19.528993  0.00  59.940  69.0   69.00   139.88
+none                 5619.0   0.000000    0.000000  0.00   0.000   0.0    0.00     0.00
+partial_refund      15100.0  31.202105   15.060418  0.00  20.000  30.0   39.96   138.00
+refund               2420.0  53.565694   23.291332  0.00  34.500  59.0   69.00   258.00
+sorry                   3.0  92.010000  105.386149  0.03  34.515  69.0  138.00   207.00
+The 2420 entries having "refund" as compensation_type have been redistributed to "partial_refund" and "full_refund" groups.
+The 3 entries having "sorry" as compensation_type have been removed.
+
+EDA - Global dataset
+Dates have been converted into "datetime64"	objects.
+Subscription_ids in pauses are a subset of subscription_ids in boxes: True
+Subscription_ids in cancels are a subset of subscription_ids in boxes: True
+Subscription_ids in errors are a subset of subscription_ids in boxes: True
+
+Extract - Extract Event Entries
+Percentile ranges:
+IntervalIndex([(2011-12-23 23:59:59.999999999, 2014-10-19], (2014-10-19, 2015-02-12], (2015-02-12, 2015-04-06], (2015-04-06, 2015-05-17], (2015-05-17, 2015-06-20] ... (2017-11-24, 2017-11-28], (2017-11-28, 2017-12-08], (2017-12-08, 2017-12-16], (2017-12-16, 2017-12-30], (2017-12-30, 2018-06-15]]
+              closed='right',
+              dtype='interval[datetime64[ns]]')
+Events outside of the range [2014-10-20, 2017-12-01] have been removed from the dataset.
+
+Extract - Group By Granularity & Customer
+
+Extract - Extract & Aggregate Event Information
+Average Churn Rate:  0.59
+
+Split - Train&Dev Size = 0.9 , Test Size = 0.1
+Churn rates in train and test sets: 0.59 0.59
+Preprocess - RobustScaler, MinMaxScaler, OneHotEncoder
+Evaluate
+Validation Accuracy: 81.25 %
+             precision    recall  f1-score   support
+
+        0.0       0.78      0.77      0.77   1291622
+        1.0       0.84      0.85      0.84   1835497
+
+avg / total       0.81      0.81      0.81   3127119
+
+Test Accuracy: 81.53 %
+             precision    recall  f1-score   support
+
+        0.0       0.77      0.79      0.78    142841
+        1.0       0.85      0.83      0.84    204617
+
+avg / total       0.82      0.82      0.82    347458
+
+Main execution ended at: 2018-12-05 01:16:02.619866.
+Total execution duration: 1:02:41.665450.
