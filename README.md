@@ -1,5 +1,5 @@
 # HelloFresh Case Study
-Data science case study: Churn Prediction using real-world HelloFresh data.
+Data science case study on subscription churn rate, based on real-world HelloFresh data.
 
 The report includes an in-depth description of my work and thought process.
 
