@@ -1,7 +1,7 @@
 # HelloFresh Case Study
 Data science case study: Churn Prediction using real-world HelloFresh data.
 
-The report offers an in-depth description of my work and thought process.
+The report includes an in-depth description of my work and thought process.
 
 The project has been carried out in 4 days (time allotted for the challenge).
 
