@@ -19,5 +19,5 @@ The "main.py" script executes the whole workflow and saves the output in a logfi
 # Highlights
 - EDA: framed the problem and leveraged some features by thinking out of the box.
 - Feature-engineered a new dataset more suitable to the task at hand and applied relevant models.
-- My pipeline involved one-hot encoding, normalization, multicollinearity assessment, logistic regression with grid search and XGBoost with early stopping.
-- Achieved 81.5% accuracy on the test set.
+- My pipeline involved one-hot encoding, normalization, multicollinearity assessment, grid search, logistic regression and XGBoost with early stopping.
+- My best model achieved 81.5% accuracy and performed statistically significantly better than the random baseline on the test set (61%).
